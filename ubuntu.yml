@@ -1,0 +1,14 @@
+- name: install packages
+  apt:
+    name:
+      - nginx
+      - php8.1-fpm
+    state: latest
+- name: configure nginx
+  template: src=files/nginx.conf dest=/etc/nginx/sites-available/default
+- name: create index.php
+  copy: src=files/index.php dest=/var/www/html/index.php owner=www-data group=www-data mode=0700
+- name: restart php fpm
+  service: name=php8.1-fpm state=restarted
+- name: restart nginx
+  service: name=nginx state=restarted
